@@ -814,6 +814,10 @@ struct mdss_panel_info {
 	u32 deep_color;
 	bool is_ce_mode; /* CE video format */
 	u8 csc_type;
+	u32 esd_err_irq_gpio;
+	u32 esd_err_irq;
+	u32 esd_interrupt_flags;
+	struct mdss_panel_esd_check initial_esd_check;
 	struct mdss_rect roi;
 	struct mdss_dsi_dual_pu_roi dual_roi;
 	int pwm_pmic_gpio;
