@@ -36,8 +36,6 @@
 #include "mdss_dsi_phy.h"
 #include "mdss_dba_utils.h"
 #include "mdss_smmu.h"
-#include "dsi_access.h"
-#include "mdss_livedisplay.h"
 
 #define CMDLINE_DSI_CTL_NUM_STRING_LEN 2
 
@@ -3180,9 +3178,6 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 					rc);
 		}
 		break;
-	case MDSS_EVENT_UPDATE_LIVEDISPLAY:
-		rc = mdss_livedisplay_update(ctrl_pdata, (int)(unsigned long) arg);
-		break;
 	default:
 		pr_debug("%s: unhandled event=%d\n", __func__, event);
 		break;
@@ -3363,7 +3358,7 @@ static struct device_node *mdss_dsi_config_panel(struct platform_device *pdev,
 	int ndx)
 {
 	struct mdss_dsi_ctrl_pdata *ctrl_pdata = platform_get_drvdata(pdev);
-	char panel_cfg[MDSS_MAX_PANEL_LEN];
+	char panel_cfg[MDSS_MAX_PANEL_LEN + 1];
 	struct device_node *dsi_pan_node = NULL;
 	int rc = 0;
 

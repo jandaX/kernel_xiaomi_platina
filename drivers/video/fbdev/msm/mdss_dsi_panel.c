@@ -1,5 +1,4 @@
-/* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
- * Copyright (C) 2020 XiaoMi, Inc.
+/* Copyright (c) 2012-2018, 2020, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -28,7 +27,6 @@
 #include "mdss_dsi.h"
 #include "mdss_dba_utils.h"
 #include "mdss_debug.h"
-#include "mdss_livedisplay.h"
 
 #define DT_CMD_HDR 6
 #define DEFAULT_MDP_TRANSFER_TIME 14000
@@ -72,14 +70,6 @@ void mdss_dsi_ulps_suspend_enable(bool enable)
 	if (mdss_pinfo)
 		mdss_pinfo->ulps_suspend_enabled = enable;
 }
-
-static bool ce_enable = true;
-static bool srgb_enable = true;
-static bool cabc_enable = false;
-
-module_param(ce_enable, bool, 0644);
-module_param(srgb_enable, bool, 0644);
-module_param(cabc_enable, bool, 0644);
 
 void mdss_dsi_panel_pwm_cfg(struct mdss_dsi_ctrl_pdata *ctrl)
 {
@@ -1596,9 +1586,6 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 	mdss_dsi_panel_apply_display_setting(pdata, pinfo->persist_mode);
 
 	ctrl->dsi_panel_off_mode = false;
-	if (pdata->event_handler)
-		pdata->event_handler(pdata, MDSS_EVENT_UPDATE_LIVEDISPLAY,
-				(void *)(unsigned long) MODE_UPDATE_ALL);
 
 end:
 	pr_info("%s:-\n", __func__);
@@ -3754,8 +3741,6 @@ static int mdss_panel_parse_dt(struct device_node *np,
 	if (rc)
 		pinfo->esc_clk_rate_hz = MDSS_DSI_MAX_ESC_CLK_RATE_HZ;
 	pr_debug("%s: esc clk %d\n", __func__, pinfo->esc_clk_rate_hz);
-
-	mdss_livedisplay_parse_dt(np, pinfo);
 
 	return 0;
 
